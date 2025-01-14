@@ -3,121 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Calibre Web Book Downloader Application">
-    <meta name="theme-color" content="#333333">
-    <title>Calibre Web Book Downloader</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <!-- Add favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <!-- UIkit CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.21.16/dist/css/uikit.min.css" />
-
-    <!-- UIkit JS -->
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.16/dist/js/uikit.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/uikit@3.21.16/dist/js/uikit-icons.min.js"></script>
+    <title>Book Search App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header>
-        <h1 class="uk-heading-medium" style="color: white;">Book Search & Download</h1>
+<body class="bg-gray-100 text-gray-900 font-sans antialiased">
+
+    <!-- Header -->
+    <header class="bg-blue-600 text-white py-4 shadow">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-2xl font-bold">Book Search and Download</h1>
+        </div>
     </header>
 
-    <main>
-        <div class="uk-container">
-            <!-- Search Section -->
-            <section class="uk-section-xxsmall uk-padding">
-                <div class="uk-container uk-width-expand">
-                    <form class="uk-search uk-search-default uk-width-expand">
-                        <input class="uk-search-input" type="search" placeholder="Search by ISBN, title, author..." aria-label="Search books" id="search-input">
-                        <button class="uk-search-icon-flip" uk-search-icon id="search-button" type="button"></button>
-                    </form>
-                </div>
-            </section>
-
-            <!-- Results Section -->
-            <ul uk-accordion id="results-section-accordion">
-                <li id="search-accordion">
-                <a class="uk-accordion-title" href><h1 class="uk-heading-xsmall">Search Results</h1></a>
-                <div class="uk-accordion-content">
-                    <div id="search-loading" class="uk-flex uk-flex-center" role="status" hidden>
-                        <div uk-spinner="ratio: 2"></div>
-                        <span>Loading...</span>
-                    </div>
-                    <div class="results-content">
-                    <button class="uk-button uk-button-primary uk-margin-small" id="download-selected-button" disabled>Download Selected</button>
-                        <div class="uk-overflow-auto">
-                            <table id="results-table" class="uk-table uk-table-hover uk-table-divider" role="grid">
-                                <thead>
-                                    <tr>
-                                        <th>
-                                            <input type="checkbox" id="select-all-checkbox" class="uk-checkbox" />
-                                        </th>
-                                        <th scope="col" data-sort="index"># <span class="sort-icon" uk-icon></span></th>
-                                        <th scope="col">Preview</th>
-                                        <th scope="col" data-sort="title">Title <span class="sort-icon" uk-icon></span></th>
-                                        <th scope="col" data-sort="author">Author <span class="sort-icon" uk-icon></span></th>
-                                        <th scope="col" data-sort="publisher">Publisher <span class="sort-icon" uk-icon></span></th>
-                                        <th scope="col" data-sort="year">Year <span class="sort-icon" uk-icon></span></th>
-                                        <th scope="col" data-sort="language">Language <span class="sort-icon" uk-icon></span></th>
-                                        <th scope="col" data-sort="format">Format <span class="sort-icon" uk-icon></span></th>
-                                        <th scope="col" data-sort="size">Size <span class="sort-icon" uk-icon></span></th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Search results will be injected here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                </li>
-            </ul>
-
-            <!-- Modal -->
-            <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
-                <div class="details-container" id="details-container">
-                    <!-- Details will be dynamically injected here -->
-                </div>
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6 space-y-6">
+        <!-- Search Section -->
+        <section>
+            <div class="flex items-center gap-2">
+                <input 
+                    id="search-input" 
+                    type="text" 
+                    class="flex-1 px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300" 
+                    placeholder="Search for a book..." 
+                />
+                <button 
+                    id="search-button" 
+                    class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 focus:ring focus:ring-blue-300"
+                >
+                    Search
+                </button>
             </div>
+            <p id="search-loading" class="text-blue-600 mt-2 hidden">Searching...</p>
+        </section>
 
-            <!-- Status Section -->
-            <ul uk-accordion id="status-section">
-                <li id="search-accordion">
-                <a class="uk-accordion-title" href><h1 class="uk-heading-xsmall">Download Status</h1></a>
-                <div class="uk-accordion-content">
-                    <div id="status-loading" class="uk-flex uk-flex-center" role="status" hidden>
-                        <div uk-spinner="ratio: 2"></div>
-                        <span>Loading...</span>
-                    </div>
-                    <div class="status-content">
-                        <div class="uk-overflow-auto">
-                            <table id="status-table" class="uk-table uk-table-hover uk-table-divider" role="grid">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Status</th>
-                                        <th scope="col">Book ID</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Preview</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Search results will be injected here -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                </li>
-            </ul>
-        </div>
+        <!-- Results Section -->
+        <section id="results-section-accordion" hidden>
+            <h2 id="results-heading" class="text-lg font-semibold">Search Results</h2>
+            <!-- Table for larger screens -->
+            <div class="hidden sm:block overflow-x-auto bg-white shadow rounded-md mt-4">
+                <table class="w-full table-auto border-collapse">
+                    <thead class="bg-gray-200 text-left">
+                        <tr>
+                            <th class="px-4 py-2">#</th>
+                            <th class="px-4 py-2">Preview</th>
+                            <th class="px-4 py-2">Title</th>
+                            <th class="px-4 py-2">Author</th>
+                            <th class="px-4 py-2">Publisher</th>
+                            <th class="px-4 py-2">Year</th>
+                            <th class="px-4 py-2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-table-body" class="divide-y divide-gray-200">
+                        <!-- Rows dynamically injected here -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- Card layout for mobile -->
+            <div class="block sm:hidden space-y-4 mt-4" id="results-card-container">
+                <!-- Cards dynamically injected here -->
+            </div>
+        </section>
+
+        <!-- Status Section -->
+        <section>
+            <h2 class="text-lg font-semibold">Download Status</h2>
+            <p id="status-loading" class="text-blue-600 hidden">Loading status...</p>
+            <table class="table-auto w-full bg-white shadow rounded-md mt-4">
+                <thead class="bg-gray-200 text-left">
+                    <tr>
+                        <th class="px-4 py-2">Status</th>
+                        <th class="px-4 py-2">ID</th>
+                        <th class="px-4 py-2">Title</th>
+                        <th class="px-4 py-2">Preview</th>
+                    </tr>
+                </thead>
+                <tbody id="status-table-body" class="divide-y divide-gray-200"></tbody>
+            </table>
+        </section>
     </main>
 
-    <footer>
-        <h1 class="uk-heading-xxsmall" style="color: white;">Calibre Web Book Downloader</h1>
-        <a href="https://github.com/calibrain/calibre-web-automated-book-downloader" class="uk-icon-link" uk-icon="icon:github; ratio: 2"></a>
-    </footer>
+    <!-- Modal -->
+    <div 
+    id="modal-overlay" 
+    class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50"
+>
+    <div class="bg-white p-6 rounded-md shadow-md w-full max-w-md">
+        <div id="details-container" class="space-y-4">
+            <!-- Details content dynamically injected here -->
+        </div>
+    </div>
+</div>
 
-    <!-- Scripts -->
+    <!-- JavaScript -->
     <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
 </body>
 </html>
