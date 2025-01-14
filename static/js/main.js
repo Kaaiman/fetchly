@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput: document.getElementById('search-input'),
         searchButton: document.getElementById('search-button'),
         resultsSectionAccordion: document.getElementById('results-section-accordion'),
+        hideResultsButton: document.getElementById('hide-results-button'),
+        resultsCardContainer: document.getElementById('results-card-container'),
         searchAccordion: document.getElementById('search-accordion'),
         resultsHeading: document.getElementById('results-heading'),
         resultsTable: document.getElementById('results-table'),
@@ -14,7 +16,48 @@ document.addEventListener('DOMContentLoaded', () => {
         statusTable: document.getElementById('status-table'),
         statusTableBody: document.getElementById('status-table-body'),
         modalOverlay: document.getElementById('modal-overlay'),
-        detailsContainer: document.getElementById('details-container')
+        detailsContainer: document.getElementById('details-container'),
+        scrollButton: document.getElementById('scroll-toggle-button'),
+        body: document.body,
+        html: document.documentElement, // For cross-browser compatibility
+        header: document.querySelector('header'), // For scrolling to the top
+    };
+
+    let isAtTop = true; // State to track scroll position
+
+    // Scroll to the appropriate position
+    elements.scrollButton.addEventListener('click', () => {
+        if (isAtTop) {
+            // Scroll to the bottom of the page
+            window.scrollTo({
+                top: elements.html.scrollHeight,
+                behavior: 'smooth',
+            });
+        } else {
+            // Scroll to the top of the page
+            elements.header.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Toggle state and update the button icon
+        isAtTop = !isAtTop;
+        updateScrollButtonIcon();
+    });
+
+    // Update button icon
+    function updateScrollButtonIcon() {
+        elements.scrollButton.innerHTML = isAtTop
+            ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-4-4a1 1 0 111.414-1.414L9 15.586V4a1 1 0 112 0v11.586l2.293-2.293a1 1 0 111.414 1.414l-4 4A1 1 0 0110 18z" clip-rule="evenodd" />
+                </svg>`
+            : `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 2a1 1 0 01.707.293l4 4a1 1 0 01-1.414 1.414L11 4.414V16a1 1 0 11-2 0V4.414l-2.293 2.293a1 1 0 11-1.414-1.414l4-4A1 1 0 0110 2z" clip-rule="evenodd" />
+                </svg>`;
+    }
+
+    // Ensure button is visible on mobile only
+    const mediaQuery = window.matchMedia('(max-width: 640px)');
+    if (mediaQuery.matches) {
+        elements.scrollButton.classList.remove('hidden');
     };
 
     // State
@@ -231,16 +274,20 @@ document.addEventListener('DOMContentLoaded', () => {
         
         createActionCell(book) {
             const buttonDetails = utils.createElement('button', {
-                className: 'bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700',
+                className: 'bg-gray-600 text-white px-2 py-1 rounded-md shadow hover:bg-gray-700 focus:ring focus:ring-gray-300',
                 onclick: () => bookDetails.show(book.id)
-            }, 'Details');
-        
+            }, ['Details']);
+
             const downloadButton = utils.createElement('button', {
-                className: 'bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700',
-                onclick: () => bookDetails.downloadBook(book)
-            }, 'Download');
-        
-            return utils.createElement('td', {}, [buttonDetails, downloadButton]);
+                className: 'bg-blue-600 text-white px-2 py-1 rounded-md shadow hover:bg-blue-700 focus:ring focus:ring-blue-300',
+                onclick: () => {
+                    bookDetails.downloadBook(book);
+                    // Hide results after initiating a download
+                    elements.resultsSectionAccordion.hidden = true;
+                }
+            }, ['Download']);
+
+            return utils.createElement('div', { className: 'flex gap-2' }, [buttonDetails, downloadButton]);
         },
 
         handleSearchError(error) {
@@ -261,6 +308,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+        // Add listener for "Hide Results" button
+        elements.hideResultsButton.addEventListener('click', () => {
+            elements.resultsSectionAccordion.hidden = true;
+        });
+        
     // Book Details Functions
     const bookDetails = {
         async show(bookId) {

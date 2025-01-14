@@ -38,7 +38,15 @@
 
         <!-- Results Section -->
         <section id="results-section-accordion" hidden>
-            <h2 id="results-heading" class="text-lg font-semibold">Search Results</h2>
+            <div class="flex justify-between items-center">
+                <h2 id="results-heading" class="text-lg font-semibold">Search Results</h2>
+                <button 
+                    id="hide-results-button" 
+                    class="bg-gray-400 text-white px-3 py-2 rounded-md shadow hover:bg-gray-500 focus:ring focus:ring-gray-300"
+                >
+                    Hide Results
+                </button>
+            </div>
             <!-- Table for larger screens -->
             <div class="hidden sm:block overflow-x-auto bg-white shadow rounded-md mt-4">
                 <table class="w-full table-auto border-collapse">
@@ -59,7 +67,7 @@
                 </table>
             </div>
             <!-- Card layout for mobile -->
-            <div class="block sm:hidden space-y-4 mt-4" id="results-card-container">
+            <div class="block sm:hidden" id="results-card-container">
                 <!-- Cards dynamically injected here -->
             </div>
         </section>
@@ -94,6 +102,16 @@
     </div>
 </div>
 
+<!-- Floating Scroll Button -->
+<button 
+    id="scroll-toggle-button" 
+    class="fixed bottom-4 right-4 z-50 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 focus:ring focus:ring-blue-300 hidden sm:block"
+    aria-label="Scroll"
+>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M10 18a1 1 0 01-.707-.293l-4-4a1 1 0 111.414-1.414L9 15.586V4a1 1 0 112 0v11.586l2.293-2.293a1 1 0 111.414 1.414l-4 4A1 1 0 0110 18z" clip-rule="evenodd" />
+    </svg>
+</button>
     <!-- JavaScript -->
     <script src="{{ url_for('static', filename='js/main.js') }}" defer></script>
 </body>
