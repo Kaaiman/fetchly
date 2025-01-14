@@ -405,12 +405,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 utils.showLoading(elements.searchLoading);
-                await utils.fetchJson(
+                utils.fetchJson(
                     `${API_ENDPOINTS.download}?id=${encodeURIComponent(book.id)}`
-                );
-                
-                modal.close();
-                status.fetch();
+                ).then(() => {
+                    modal.close();
+                    status.fetch();
+        
+                    // Hide search results section
+                    if (elements.resultsSectionAccordion) {
+                        elements.resultsSectionAccordion.hidden = true;
+                    }
+                });
             } catch (error) {
                 console.error('Download error:', error);
             } finally {
