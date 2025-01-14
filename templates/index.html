@@ -73,21 +73,31 @@
         </section>
 
         <!-- Status Section -->
-        <section>
-            <h2 class="text-lg font-semibold">Download Status</h2>
-            <p id="status-loading" class="text-blue-600 hidden">Loading status...</p>
-            <table class="table-auto w-full bg-white shadow rounded-md mt-4">
-                <thead class="bg-gray-200 text-left">
-                    <tr>
-                        <th class="px-4 py-2">Status</th>
-                        <th class="px-4 py-2">ID</th>
-                        <th class="px-4 py-2">Title</th>
-                        <th class="px-4 py-2">Preview</th>
-                    </tr>
-                </thead>
-                <tbody id="status-table-body" class="divide-y divide-gray-200"></tbody>
-            </table>
-        </section>
+<!-- Status Section -->
+<section id="downloads-section">
+    <h2 class="text-lg font-semibold mb-4">Download Status</h2>
+    <p id="status-loading" class="text-blue-600 hidden mb-2">Loading status...</p>
+    <!-- Table for larger screens -->
+    <div class="hidden sm:block overflow-x-auto bg-white shadow rounded-md">
+        <table class="w-full table-auto border-collapse">
+            <thead class="bg-gray-200 text-left">
+                <tr>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">ID</th>
+                    <th class="px-4 py-2">Title</th>
+                    <th class="px-4 py-2">Preview</th>
+                </tr>
+            </thead>
+            <tbody id="status-table-body" class="divide-y divide-gray-200">
+                <!-- Rows dynamically injected here -->
+            </tbody>
+        </table>
+    </div>
+    <!-- Card layout for mobile -->
+    <div class="block sm:hidden" id="status-card-container">
+        <!-- Cards dynamically injected here -->
+    </div>
+</section>
     </main>
 
     <!-- Modal -->

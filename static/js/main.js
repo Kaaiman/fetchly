@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
         statusTableBody: document.getElementById('status-table-body'),
         modalOverlay: document.getElementById('modal-overlay'),
         detailsContainer: document.getElementById('details-container'),
+        statusCardContainer: document.getElementById('status-card-container'), // Add this line
         scrollButton: document.getElementById('scroll-toggle-button'),
         body: document.body,
         html: document.documentElement, // For cross-browser compatibility
@@ -430,7 +431,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Status Functions
     const status = {
         async fetch() {
             try {
@@ -443,85 +443,99 @@ document.addEventListener('DOMContentLoaded', () => {
                 utils.hideLoading(elements.statusLoading);
             }
         },
-
+    
         display(data) {
+            // Clear existing content
             elements.statusTableBody.innerHTML = '';
-            
+            elements.statusCardContainer.innerHTML = '';
+    
             // Handle each status type
             Object.entries(data).forEach(([status, booksInStatus]) => {
-                // If the status section has books
                 if (Object.keys(booksInStatus).length > 0) {
-                    // For each book in this status
                     Object.entries(booksInStatus).forEach(([bookId, bookData]) => {
                         this.addStatusRow(status, bookData);
+                        this.addStatusCard(status, bookData);
                     });
                 }
             });
         },
-
+    
         addStatusRow(status, book) {
             if (!book.id || !book.title) return;
-
-            const statusCell = utils.createElement('td', {
-                className: `status-${status.toLowerCase()}`,
-                textContent: status
-            });
-
-            let titleElement;
-            if (status.toLowerCase().includes('available')) {
-                titleElement = utils.createElement('a', {
-                    href: `/api/localdownload?id=${book.id}`,
-                    target: '_blank',
-                    textContent: book.title || 'N/A'
-                });
-            }
-            else {
-                titleElement = utils.createElement('td', { textContent: book.title || 'N/A' })
-            }
-
+    
             const row = utils.createElement('tr', {}, [
-                statusCell,
+                utils.createElement('td', { textContent: status }),
                 utils.createElement('td', { textContent: book.id }),
-                titleElement,
-                this.createPreviewCell(book.preview)
+                utils.createElement('td', { textContent: book.title }),
+                this.createPreviewCell(book.preview),
             ]);
-
+    
             elements.statusTableBody.appendChild(row);
         },
-
-        createPreviewCell(previewUrl) {
-            const cell = utils.createElement('td');
-            
-            if (previewUrl) {
-                const img = utils.createElement('img', {
-                    src: previewUrl,
-                    alt: 'Book Preview',
-                    style: 'max-width: 60px; height: auto;'
-                });
-                cell.appendChild(img);
-            } else {
-                cell.textContent = 'N/A';
-            }
-            
-            return cell;
+    
+        addStatusCard(status, book) {
+            if (!book.id || !book.title) return;
+    
+            const card = utils.createElement('div', {
+                className: 'bg-white shadow rounded-md p-4 mb-4',
+            }, [
+                utils.createElement('div', { className: 'flex items-center justify-between' }, [
+                    utils.createElement('h3', { className: 'text-lg font-semibold' }, book.title),
+                    utils.createElement('span', {
+                        className: 'text-sm font-medium text-gray-600',
+                        textContent: status,
+                    }),
+                ]),
+                utils.createElement('p', { className: 'text-sm text-gray-600 mt-2' }, `ID: ${book.id}`),
+                book.preview
+                    ? utils.createElement('img', {
+                        src: book.preview,
+                        alt: 'Book Preview',
+                        className: 'w-16 h-16 mt-2',
+                    })
+                    : utils.createElement('p', { className: 'text-sm text-gray-600 mt-2' }, 'No preview available'),
+            ]);
+    
+            elements.statusCardContainer.appendChild(card);
         },
-
+    
+        createPreviewCell(previewUrl) {
+            if (!previewUrl) {
+                return utils.createElement('td', { textContent: 'N/A' });
+            }
+    
+            const img = utils.createElement('img', {
+                src: previewUrl,
+                alt: 'Book Preview',
+                className: 'w-12 h-12',
+            });
+    
+            return utils.createElement('td', {}, [img]);
+        },
+    
         handleError(error) {
             console.error('Status error:', error);
-        
+    
             if (elements.statusTableBody) {
                 elements.statusTableBody.innerHTML = '';
                 const errorRow = utils.createElement('tr', {}, [
                     utils.createElement('td', {
                         colSpan: '4',
-                        textContent: 'Error loading status. Will retry automatically.'
-                    })
+                        textContent: 'Error loading status. Will retry automatically.',
+                    }),
                 ]);
                 elements.statusTableBody.appendChild(errorRow);
-            } else {
-                console.error('Error: statusTableBody element is missing in the DOM.');
             }
-        }
+    
+            if (elements.statusCardContainer) {
+                elements.statusCardContainer.innerHTML = '';
+                const errorCard = utils.createElement('div', {
+                    className: 'bg-red-100 text-red-600 p-4 rounded-md',
+                    textContent: 'Error loading status. Will retry automatically.',
+                });
+                elements.statusCardContainer.appendChild(errorCard);
+            }
+        },
     };
 
     // Modal Functions
