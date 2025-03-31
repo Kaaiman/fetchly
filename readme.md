@@ -1,6 +1,6 @@
 # 📚 Fetchly
 
-![Fetchly](static/media/logo.svg 'Fetchly')
+<img src="static/media/logo.svg" alt="Fetchly" title="Fetchly" width="200" />
 
 A clean, mobile-first responsive web interface for searching and requesting book downloads, forked from [Calibre-Web-Automated-Book-Downloader](https://github.com/crocodilestick/Calibre-Web-Automated). Fetchly streamlines the process of downloading books with a focus on modern design and mobile accessibility.
 
@@ -15,11 +15,14 @@ A clean, mobile-first responsive web interface for searching and requesting book
 
 ## 🖼️ Screenshots
 
-![Main search interface Screenshot](README_images/search.png 'Main search interface')
+### Mobile Views
+<img src="README_images/search-mobile.webp" alt="Mobile search interface" title="Mobile search interface" width="300" />
+<img src="README_images/details-mobile.webp" alt="Mobile details modal" title="Mobile details modal" width="300" />
+<img src="README_images/downloading-mobile.webp" alt="Mobile download queue" title="Mobile download queue" width="300" />
 
-![Details modal Screenshot placeholder](README_images/details.png 'Details modal')
-
-![Download queue Screenshot placeholder](README_images/downloading.png 'Download queue')
+### Desktop Views
+<img src="README_images/search-desktop.webp" alt="Desktop search interface" title="Desktop search interface" width="600" />
+<img src="README_images/details-desktop.webp" alt="Desktop details modal" title="Desktop details modal" width="600" />
 
 ## 🚀 Quick Start
 
@@ -34,7 +37,7 @@ A clean, mobile-first responsive web interface for searching and requesting book
 1. Get the docker-compose.yml:
 
    ```bash
-   curl -O https://raw.githubusercontent.com/calibrain/calibre-web-automated-book-downloader/refs/heads/main/docker-compose.yml
+   curl -O https://raw.githubusercontent.com/lklynet/fetchly/refs/heads/main/docker-compose.yml
    ```
 
 2. Start the service:
@@ -109,7 +112,7 @@ Mount should align with your Calibre-Web-Automated ingest folder.
 
 The application consists of two key services:
 
-1. **calibre-web-automated-bookdownloader**: Main application providing web interface and download functionality
+1. **Fetchly**: Main application providing web interface and download functionality
 2. **cloudflarebypassforscraping**: Support service for handling Cloudflare-protected websites
 
 ## 🏥 Health Monitoring
