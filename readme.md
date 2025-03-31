@@ -1,12 +1,12 @@
-# 📚 Calibre-Web-Automated-Book-Downloader
+# 📚 Fetchly
 
-![Calibre-Web Automated Book Downloader](static/media/logo.png 'Calibre-Web Automated Book Downloader')
+![Fetchly](static/media/logo.svg 'Fetchly')
 
-An intuitive web interface for searching and requesting book downloads, designed to work seamlessly with [Calibre-Web-Automated](https://github.com/crocodilestick/Calibre-Web-Automated). This project streamlines the process of downloading books and preparing them for integration into your Calibre library.
+A clean, mobile-first responsive web interface for searching and requesting book downloads, forked from [Calibre-Web-Automated-Book-Downloader](https://github.com/crocodilestick/Calibre-Web-Automated). Fetchly streamlines the process of downloading books with a focus on modern design and mobile accessibility.
 
 ## ✨ Features
 
-- 🌐 User-friendly web interface for book search and download
+- 🌐 Clean, mobile-first responsive web interface for book search and download
 - 🔄 Automated download to your specified ingest folder
 - 🔌 Seamless integration with Calibre-Web-Automated
 - 📖 Support for multiple book formats (epub, mobi, azw3, fb2, djvu, cbz, cbr)

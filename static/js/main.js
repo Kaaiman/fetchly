@@ -377,13 +377,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             Close
                         </button>
                     </div>
-        
-                    <div class="border-t pt-4">
-                        <h4 class="text-lg font-semibold text-gray-700">Further Information</h4>
-                        <div class="text-gray-600">
-                            ${this.generateInfoList(book.info)}
-                        </div>
-                    </div>
                 </div>
             `;
         },
