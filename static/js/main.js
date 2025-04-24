@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
         body: document.body,
         html: document.documentElement, // For cross-browser compatibility
         header: document.querySelector('header'), // For scrolling to the top
+        darkModeToggle: document.getElementById('dark-mode-toggle'),
+        sunIcon: document.getElementById('sun-icon'),
+        moonIcon: document.getElementById('moon-icon'),
     };
 
     let isAtTop = true; // State to track scroll position
@@ -591,9 +594,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Dark Mode Logic
+    const darkMode = {
+        init() {
+            // Check localStorage for saved preference
+            const savedMode = localStorage.getItem('darkMode');
+            if (savedMode === 'dark') {
+                this.enable();
+            } else {
+                // Default to light mode if no preference or preference is 'light'
+                this.disable(); 
+            }
+            this.addToggleListener();
+        },
+
+        enable() {
+            elements.html.classList.add('dark');
+            elements.sunIcon.classList.add('hidden');
+            elements.moonIcon.classList.remove('hidden');
+            localStorage.setItem('darkMode', 'dark');
+        },
+
+        disable() {
+            elements.html.classList.remove('dark');
+            elements.sunIcon.classList.remove('hidden');
+            elements.moonIcon.classList.add('hidden');
+            localStorage.setItem('darkMode', 'light');
+        },
+
+        toggle() {
+            if (elements.html.classList.contains('dark')) {
+                this.disable();
+            } else {
+                this.enable();
+            }
+        },
+
+        addToggleListener() {
+            if (elements.darkModeToggle) {
+                elements.darkModeToggle.addEventListener('click', () => this.toggle());
+            } else {
+                console.error('Dark mode toggle button not found.');
+            }
+        }
+    };
+
     // Initialize
     function init() {
         setupEventListeners();
+        darkMode.init(); // Initialize dark mode
         status.fetch();
         setInterval(() => status.fetch(), REFRESH_INTERVAL);
     }
