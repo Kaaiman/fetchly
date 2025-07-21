@@ -30,10 +30,12 @@ def search_books(query: str) -> List[BookInfo]:
     parsed = urlparse(query)
     goodreads = 'goodreads.com' in parsed.netloc and parsed.path.startswith('/book/show/')
     if goodreads:
-        goodreads_title = metadata
+        goodreads_title = metadata.get_title(query)
+        goodreads_url = query
+        query = goodreads_title
         logger.info(f"Detected goodreads URL for book: {goodreads_title}")
     else:
-        raise Exception("Only goodreads URL supported"
+        raise Exception("Only goodreads URL supported.")
 
     
     query_html = quote(query)
@@ -63,7 +65,7 @@ def search_books(query: str) -> List[BookInfo]:
     if  isinstance(tbody, Tag):
         for line_tr in tbody.find_all('tr'):
             try:
-                book = _parse_search_result_row(line_tr)
+                book = _parse_search_result_row(line_tr, goodreads_url)
                 if book:
                     books.append(book)
             except Exception as e:
@@ -79,7 +81,7 @@ def search_books(query: str) -> List[BookInfo]:
     
     return books
 
-def _parse_search_result_row(row) -> Optional[BookInfo]:
+def _parse_search_result_row(row, url) -> Optional[BookInfo]:
     """Parse a single search result row into a BookInfo object."""
     try:
         cells = row.find_all('td')
@@ -95,7 +97,8 @@ def _parse_search_result_row(row) -> Optional[BookInfo]:
             year=cells[4].find('span').next,
             language=cells[7].find('span').next,
             format=cells[9].find('span').next.lower(),
-            size=cells[10].find('span').next
+            size=cells[10].find('span').next,
+            goodreads_url=url
         )
     except Exception as e:
         logger.error(f"Error parsing search result row: {e}")
@@ -287,6 +290,8 @@ def download_book(book_info: BookInfo, book_path: Path) -> bool:
                 with open(book_path, "wb") as f:
                     f.write(data.getbuffer())
                 logger.info(f"Writing {book_info.title} successfully")
+                metadata.metadata(book_info.goodreads_url, book_path, TMP_DIR)
+                logger.info(f"Metadata of {book_info.title} extracted")
                 return True
             
         except Exception as e:

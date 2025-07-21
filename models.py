@@ -28,6 +28,7 @@ class BookInfo:
     size: Optional[str] = None
     info: Optional[Dict[str, List[str]]] = None
     download_urls: List[str] = field(default_factory=list)
+    goodreads_url: Optional[str] = None
 
 class BookQueue:
     """Thread-safe book queue manager."""
