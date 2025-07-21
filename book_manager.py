@@ -2,7 +2,7 @@
 
 import time, json
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 from typing import List, Optional, Dict
 from bs4 import BeautifulSoup, Tag, NavigableString
 from io import BytesIO
@@ -11,6 +11,7 @@ from logger import setup_logger
 from config import SUPPORTED_FORMATS, BOOK_LANGUAGE, AA_DONATOR_KEY, AA_BASE_URL, USE_CF_BYPASS
 from models import BookInfo
 import network
+import metadata
 
 logger = setup_logger(__name__)
 
@@ -26,6 +27,15 @@ def search_books(query: str) -> List[BookInfo]:
     Raises:
         Exception: If no books found or parsing fails
     """
+    parsed = urlparse(query)
+    goodreads = 'goodreads.com' in parsed.netloc and parsed.path.startswith('/book/show/')
+    if goodreads:
+        goodreads_title = metadata
+        logger.info(f"Detected goodreads URL for book: {goodreads_title}")
+    else:
+        raise Exception("Only goodreads URL supported"
+
+    
     query_html = quote(query)
     url = (
         f"{AA_BASE_URL}"
